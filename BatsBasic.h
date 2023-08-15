@@ -267,7 +267,7 @@ public:
             deterministic_degree = smNum;
         }
 
-        return degree;
+        return deterministic_degree;
 
 
     }
