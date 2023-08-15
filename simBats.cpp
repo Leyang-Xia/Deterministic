@@ -21,7 +21,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
@@ -33,9 +32,8 @@
 #include "BatchDec.h"
 //#include "NCCoder.h"
 #include "FiniteField.h"
-#include "fileinout.h"
 #include "simRecoder.h"
-#include <random>
+
 using namespace std;
 
 // Parameters

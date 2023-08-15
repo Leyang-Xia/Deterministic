@@ -39,3 +39,7 @@
 4	423	1692092428728075853	CMakeFiles/simbats_master.dir/simBats.cpp.o	bc67052df2d7b333
 424	481	1692092428788784124	simbats_master	f88a6cea9b4f6033
 3	47	1692094529919417019	simbats_master	f88a6cea9b4f6033
+3	318	1692095857233016754	CMakeFiles/simbats_master.dir/BatchEnc.cpp.o	3c4a6d4125c78dd8
+3	351	1692095857268051780	CMakeFiles/simbats_master.dir/BatchDec.cpp.o	1c733e23f8051c95
+3	426	1692095857342524626	CMakeFiles/simbats_master.dir/simBats.cpp.o	bc67052df2d7b333
+428	469	1692095857387708285	simbats_master	f88a6cea9b4f6033
