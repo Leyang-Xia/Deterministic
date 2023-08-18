@@ -1,6 +1,5 @@
 /Users/leyang/Desktop/simbats-master/cmake-build-debug/CMakeFiles/simbats_master.dir
 /Users/leyang/Desktop/simbats-master/cmake-build-debug/CMakeFiles/generate.dir
 /Users/leyang/Desktop/simbats-master/cmake-build-debug/CMakeFiles/nextdegree.dir
-/Users/leyang/Desktop/simbats-master/cmake-build-debug/CMakeFiles/simwd.dir
 /Users/leyang/Desktop/simbats-master/cmake-build-debug/CMakeFiles/edit_cache.dir
 /Users/leyang/Desktop/simbats-master/cmake-build-debug/CMakeFiles/rebuild_cache.dir

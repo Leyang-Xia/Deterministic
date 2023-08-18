@@ -48,9 +48,9 @@ public:
     void setInputPackets(SymbolType *input);
 
     ~BatsEncoder() {
-        if (packets != NULL)
+        if (packets != nullptr)
             free(packets);
-        if (checkPackets != NULL)
+        if (checkPackets != nullptr)
             freeMat(checkPackets, checkNum);
     }
 

@@ -175,11 +175,8 @@ public:
 private:
     void getDegDist() {
         stringstream iss;
-
-       //iss << "../simDegreeK" << packetNum << "M" << batchSize << "m" << gf_order << ".txt";
-        iss << "/Users/leyang/Desktop/bats_code_utilities-master/julia/bettersimDegreeK640M32m8.txt";
-        //iss << "../wasserstein1simdegree.txt";
-        //    iss << "ddM" << batchSize << "m" << gf_order << "FR.txt";
+        //iss << "/Users/leyang/Desktop/bats_code_utilities-master/julia/bettersimDegreeK640M32m8.txt";
+        iss << "../wasserstein1simdegree.txt";
         ifstream filestr;
 
         filestr.open(iss.str().c_str());
@@ -252,11 +249,11 @@ private:
 			delete simcoder;
     }
 
-    void initNetwork(int r) {
+    void initNetwork() {
         // Initialize encoder
         clearNetwork();
 
-        random = r;
+//        random = r;
 
         encoder = new BatsEncoder(batchSize, input, packetNum, packetSize);
         //encoder = new BatsEncoder(batchSize, packetNum, packetSize, input);//Tom: interface change
@@ -278,11 +275,11 @@ private:
     }
 
 public:
-    void runOnce(TimeUsed& timeUsed, DecoderStatus& ds, int i) {
+    void runOnce(TimeUsed& timeUsed, DecoderStatus& ds, int r) {
 
-        initNetwork(i);
+        initNetwork();
 
-        run(timeUsed, ds, i);
+        run(timeUsed, ds, r);
 
         decoder->rankDist(ds.rankdist);
 
@@ -387,7 +384,7 @@ int main(int argc, char* argv[]) {
     // set parameters
     int batchSize;
     int gf_order = 8; // 1, 2, 4, 8
-    int packetNum;
+    double packetNum;
     int packetSize = 1; //In Bytes
     //int packetSizeInSymbol = packetSize * SymbolSize / gf_order;
 
@@ -398,7 +395,7 @@ int main(int argc, char* argv[]) {
     switch(argc) {
         case 1:
             batchSize = 32; // 16, 32, 64
-            packetNum = 480;
+            packetNum = 160;
             iterationNum = 10000;
             break;
         case 4:
@@ -456,9 +453,12 @@ int main(int argc, char* argv[]) {
 
         double rate = (packetNum - ds.nError) / (float)ds.nReceive;
 
-        cout << "Rate = " << rate << endl;
+        //design coding rate
+        double rate1 = packetNum / ds.nTrans;
 
-        output << rate << " ";
+        cout << "K/n = " << rate1 << endl;
+
+        output << rate1 << " ";
 
         cout << "Decoding time = " << timeUsed.decoding.time() << " Encoding time = " << timeUsed.encoding.time()  << endl;
 
@@ -488,7 +488,8 @@ int main(int argc, char* argv[]) {
         cout << "E[rank(H)] = " << Erk << "(" << Erk / (float) batchSize << ")" << endl;
 
 
-        CO[iter]= Erk / (float) batchSize - rate;
+        CO[iter]= Erk / (float) batchSize - rate1;
+
 
         cout << "CO = " << CO[iter] << endl;
     }

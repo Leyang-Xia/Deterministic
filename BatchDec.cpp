@@ -126,12 +126,6 @@ CheckNode* BatsDecoder::initNewBatch(KeyType batchID, int random) {
     // generate the degree
     int degree = (int) getBatchDegree(batchID, random);
 
-    std::ofstream outfile("../data.txt", std::ios::app);
-    if (outfile.is_open()) {
-        outfile << batchID << endl;
-        outfile.close(); // 关闭文件
-    }
-
     CheckNode *it = new CheckNode(degree+piDegree, batchSize, packetSize, maxInact);
 
     it->id = batchID;

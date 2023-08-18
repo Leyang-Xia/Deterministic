@@ -5,8 +5,6 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <fstream>
-#include <sstream>
 #include "fileinout.h"
 
 
@@ -80,7 +78,7 @@ int main() {
 
 
     // 生成与给定分布的Wasserstein距离为targetDistance的分布
-    double targetDistance = 1;
+    double targetDistance = 0.7;
 
     std::vector<double> distribution = generateDistributionWithWassersteinDistance(targetDistribution, targetDistance);
     std::string filename2 = "../wasserstein1simdegree.txt";

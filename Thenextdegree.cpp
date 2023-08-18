@@ -80,7 +80,8 @@ int getNextBatchDegree(std::vector<double> degree, const std::vector<double>& ta
 }
 
 int main() {
-    std::string filename1 = "/Users/leyang/Desktop/bats_code_utilities-master/julia/bettersimDegreeK640M32m8.txt";
+//    std::string filename1 = "/Users/leyang/Desktop/bats_code_utilities-master/julia/bettersimDegreeK640M32m8.txt";
+    std::string filename1 = "../wasserstein1simdegree.txt";
     std::vector<double> targetDistribution = readDataFromFile(filename1); // 目标度分布
     //std::vector<double> targetDistribution = {0, 0.2, 0, 0.5, 0.05, 0.15};
     int k = targetDistribution.size();
@@ -90,7 +91,7 @@ int main() {
     std::vector<double> degrees(k, 0); // 开始时的度分布
 
     // 确定下一个批次的度k
-  for (int i = 0; i < 10000; i++) {
+  for (int i = 0; i < 1000; i++) {
         int nextDegree = getNextBatchDegree(degrees, targetDistribution);
         std::cout << std::endl;
         std::cout << "下一个批次的度为：" << nextDegree << std::endl;

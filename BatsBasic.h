@@ -269,7 +269,6 @@ public:
 
         return degree;
 
-
     }
 
     void genBatchParam(int degree, int* idx, SymbolType** G, int* idxI, SymbolType** GI){
