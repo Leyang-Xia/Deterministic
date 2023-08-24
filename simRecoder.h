@@ -1,23 +1,3 @@
-/*
- Copyright (C) 2014 Tom M. Y. Lam, Shenghao Yang
- 
- This file is part of SimBATS.
- 
- SimBATS is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- SimBATS is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with SimBATS.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-
 #ifndef SIMRECODER_H
 #define SIMRECODER_H
 
@@ -50,7 +30,7 @@ public:
         for (int i = curRank; i < M; i++) {
             memset(dstBatchWithoutID[i], 0, L*sizeof(SymbolType));
         }
-        
+
         return curRank;
         
     }
@@ -59,7 +39,6 @@ private:
 	int M; //BatchSize
 	int L; //Total packet length in bytes
 	int Q; //No. of element in finite field minus one. For use in PRNG
-
 	//Rank distribution
 	DistSampler rankSampler;
 

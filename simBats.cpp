@@ -1,21 +1,3 @@
-/*
- Copyright (C) 2014 Shenghao Yang
- 
- This file is part of SimBATS.
- 
- SimBATS is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- SimBATS is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with SimBATS.  If not, see <http://www.gnu.org/licenses/>.
- */
 
 #include <fstream>
 #include <iostream>
@@ -106,6 +88,7 @@ class TimeUsed{ //该类用于记录编码和解码的时间使用情况
 
 class BATSimulator {
 private:
+    std::vector<int> curRankVector;
     int random;
     int batchSize;
     int gf_order;
@@ -175,8 +158,8 @@ public:
 private:
     void getDegDist() {
         stringstream iss;
-        //iss << "/Users/leyang/Desktop/bats_code_utilities-master/julia/bettersimDegreeK640M32m8.txt";
-        iss << "../wasserstein1simdegree.txt";
+        iss << "/Users/leyang/Desktop/bats_code_utilities-master/julia/bettersimDegreeK640M32m8.txt";
+        //iss << "../wasserstein1simdegree.txt";
         ifstream filestr;
 
         filestr.open(iss.str().c_str());
@@ -275,6 +258,14 @@ private:
     }
 
 public:
+    const std::vector<int>& getCurRankVector() const {
+        return curRankVector;
+    }
+
+    void clearCurRankVector() {
+        curRankVector.clear();
+    }
+
     void runOnce(TimeUsed& timeUsed, DecoderStatus& ds, int r) {
 
         initNetwork();
@@ -332,6 +323,8 @@ public:
 
 			/* Simulation of recoding */
 			recCnt = simcoder->genBatch(recBatchWithoutId, batchWithoutId);
+            curRankVector.push_back(recCnt);
+
 			for (int i = 0; i < batchSize; i++) {
 				saveIDInPacket(recBatch[i], &id);
 			}
@@ -391,12 +384,13 @@ int main(int argc, char* argv[]) {
     int iterationNum;
     //const float decRatio = 0.99;
 
+    double sumRank = 0;
 
     switch(argc) {
         case 1:
             batchSize = 32; // 16, 32, 64
-            packetNum = 160;
-            iterationNum = 10000;
+            packetNum = 800;
+            iterationNum = 1000;
             break;
         case 4:
             batchSize = atoi(argv[1]);
@@ -442,9 +436,17 @@ int main(int argc, char* argv[]) {
 
     while (iter < iterationNum) {
         cout << "===== " << iter << " =====" << endl;
-
+        int totalrank = 0;
 
         sim.runOnce(timeUsed, ds, iter);
+        const std::vector<int>& curRankVector = sim.getCurRankVector();
+        for (auto value:curRankVector) {
+            totalrank += value;
+        }
+        sumRank += totalrank;
+
+        sim.clearCurRankVector();
+
         iter++;
 
         output << ds.nTrans << " " << ds.nReceive << " " << ds.nSave << " " << ds.nInact << " " << ds.nError << " ";
@@ -454,7 +456,7 @@ int main(int argc, char* argv[]) {
         double rate = (packetNum - ds.nError) / (float)ds.nReceive;
 
         //design coding rate
-        double rate1 = packetNum / ds.nTrans;
+        double rate1 = batchSize * (packetNum - ds.nError) / ds.nTrans;
 
         cout << "K/n = " << rate1 << endl;
 
@@ -473,7 +475,7 @@ int main(int argc, char* argv[]) {
             errIdx[nErrIdx++] = iter-1;
         }
 
-
+//k很小时这样并不准确
         for (int i = 0; i <= batchSize; i++) {
             output << ds.rankdist[i] << " ";
             cout << ds.rankdist[i] << " ";
@@ -485,10 +487,10 @@ int main(int argc, char* argv[]) {
 
         cout << endl;
 
-        cout << "E[rank(H)] = " << Erk << "(" << Erk / (float) batchSize << ")" << endl;
+        cout << "Total rank = " << totalrank << " and Average rank = " << (double)(totalrank * batchSize) / ds.nTrans << endl;
 
 
-        CO[iter]= Erk / (float) batchSize - rate1;
+        CO[iter]= (totalrank - packetNum) / ds.nTrans * batchSize;
 
 
         cout << "CO = " << CO[iter] << endl;
@@ -499,23 +501,22 @@ int main(int argc, char* argv[]) {
     cout << "======== END =======" << endl;
     cout << "Simulation ends with " << nSucc << " succeeds out of " << iter << " runs" << endl;
 
-    cout << "Average Rank Distribution: ";
+//    cout << "Average Rank Distribution: ";
+//k很小时不能这么算
 
-    double totalRank = 0;
-    double sumRank = 0;
-    for(int i = 0; i <= batchSize; i++) {
-        sumRank += accuRankDist[i];
-    }
-    for(int i = 0; i <= batchSize; i++) {
-        accuRankDist[i] /= sumRank;
-        totalRank += i * accuRankDist[i];
-        cout << accuRankDist[i] << " ";
-    }
+//    for(int i = 0; i <= batchSize; i++) {
+//        sumRank += accuRankDist[i];
+//    }
+//    for(int i = 0; i <= batchSize; i++) {
+//        accuRankDist[i] /= sumRank;
+//        totalRank += i * accuRankDist[i];
+//        cout << accuRankDist[i] << " ";
+//    }
     cout << endl;
 
-    cout << "Average rate of succeeded runs = " <<  nSucc * packetNum / (float)totalTrans << " vs average rank = " << totalRank / (float) batchSize << endl;
+    cout << "Average K/n = " <<  (nSucc * packetNum * batchSize)  / totalTrans << " vs average rank = " << (sumRank * batchSize)/ totalTrans << endl;
 
-    cout << "Average coding overhead = " <<  totalRank / (float) batchSize - nSucc * packetNum / (float)totalTrans << endl;
+    cout << "Average coding overhead = " <<  (sumRank * batchSize)/ totalTrans - batchSize * nSucc * packetNum / (float)totalTrans << endl;
 
     cout << "Variance of coding overhead = " << calculateVariance(CO) << endl;
 

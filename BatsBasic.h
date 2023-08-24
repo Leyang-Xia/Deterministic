@@ -1,22 +1,3 @@
-/*
- Copyright (C) 2014 Shenghao Yang
- 
- This file is part of SimBATS.
- 
- SimBATS is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- SimBATS is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with SimBATS.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #ifndef BATSBASIC_H
 #define	BATSBASIC_H
 
@@ -91,14 +72,18 @@ public:
             targetDistribution.push_back(number);
         }
 
-        precodeRate = 0.0101;
-        
+        precodeRate = 0.15;
+
         if (packetNum < 20000) {
             // this value is good for 1600, 16000
-            ldpcNum = (int) (precodeRate * packetNum + sqrt(3*packetNum));
+            ldpcNum = (int)(precodeRate * packetNum + sqrt(1.5 * packetNum));
         } else {
             ldpcNum = (int) (precodeRate * packetNum + sqrt(4*packetNum));
         }
+
+        ldpcNum = 1;
+
+
 
         if (ldpcNum > 0) {
             hdpcNum = (int)log(packetNum);
@@ -108,7 +93,10 @@ public:
         } else { // BATS_PRECODE_RATE == 0 for no precoding
             hdpcNum = 0;
         }
-        
+
+        hdpcNum = 5;
+
+
         ldpcVarDegree = 3;
 
         checkNum = ldpcNum+hdpcNum;
@@ -267,7 +255,7 @@ public:
             deterministic_degree = smNum;
         }
 
-        return degree;
+        return deterministic_degree;
 
     }
 
