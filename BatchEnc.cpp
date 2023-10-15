@@ -145,7 +145,7 @@ void BatsEncoder::genBatchWithKey(SymbolType **batch, KeyType key, int random){
     
     // encoding: BATS parts
     
-    int *idx = new int[degree];
+    int *idx = new int[degree]; //记录了一个batch中参与的包的head
     int *idxI = new int[piDegree];
     SymbolType **G = mallocMat<SymbolType>(degree,batchSize);
     SymbolType **GI = mallocMat<SymbolType>(piDegree,batchSize);
@@ -153,7 +153,7 @@ void BatsEncoder::genBatchWithKey(SymbolType **batch, KeyType key, int random){
     
     for(i=0;i<degree;i++){
 
-        t0 = getPkgHead(idx[i]);
+        t0 = getPkgHead(idx[i]); //t0就是一个packet
         
         for(j=0;j<batchSize;j++){
             FF.addvvcCMP(batch[j]+nSymInHead, t0, G[i][j], packetSize);

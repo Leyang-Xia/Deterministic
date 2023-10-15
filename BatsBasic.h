@@ -19,7 +19,7 @@ protected:
     int packetSize; // packet length in Bytes
     int checkNum; // number of check packets
     int totalNum; // packetNum + checkNum
-    
+    vector<int> numberCount;
     // input packets
     SymbolType **packets;
 
@@ -61,18 +61,22 @@ protected:
     int nFFInSym;
     SymbolType maskDec; //typedef unsigned char SymbolType
     SymbolType maskEnc;
-    vector<int> targetDistribution;
+    vector<int> targetDegree;
 public:
     BatsBasic(int M, int K, int T) : batchSize(M), packetNum(K), packetSize(T) {
+        //初始化包计数向量
+        for (int i = 0; i < K; i++) {
+            numberCount.push_back(0);
+        }
 
         ifstream filename("../TheNextDegree.txt");
         int number;
         while( ! filename.eof()) {
             filename >> number;
-            targetDistribution.push_back(number);
+            targetDegree.push_back(number);
         }
 
-        precodeRate = 0.15;
+        precodeRate = 0.0101;
 
         if (packetNum < 20000) {
             // this value is good for 1600, 16000
@@ -84,7 +88,6 @@ public:
         ldpcNum = 1;
 
 
-
         if (ldpcNum > 0) {
             hdpcNum = (int)log(packetNum);
             hdpcNum = (hdpcNum > 5)? hdpcNum : 5;
@@ -94,7 +97,8 @@ public:
             hdpcNum = 0;
         }
 
-        hdpcNum = 5;
+        hdpcNum = 2;
+
 
 
         ldpcVarDegree = 3;
@@ -154,7 +158,7 @@ public:
     }
     
     inline SymbolType* getPkgHead(int pid){
-        return (pid < packetNum) ? packets[pid] : checkPackets[pid - packetNum];
+        return (pid < packetNum) ? packets[pid] : checkPackets[pid - packetNum]; //返回的是一个包
     }
 
     // coordinate changes between [active inactive] to 
@@ -246,7 +250,7 @@ public:
     unsigned long getBatchDegree(int key, int random){
         psrand->seed(key ^ random);
        unsigned long degree = dist->sample(psrand->rand());
-       unsigned long deterministic_degree = targetDistribution[key - ldpcNum];
+       unsigned long deterministic_degree = targetDegree[key - ldpcNum];
         if (degree > smNum){
             degree = smNum;
         }
@@ -269,15 +273,20 @@ public:
         
         for(i=0;i<degree;i++){
             j = psrand->randInt(smNum-1-i)+i;
-            
+
             swap(idVec[i],idVec[j]);
             
             idx[i] = smToExt(idVec[i]);
+
+            numberCount[idx[i]]++;
             
             for(j=0;j<batchSize;j++){
                 G[i][j] = (SymbolType)(psrand->randInt(fieldSizeMinOne));
             }
+
         }
+
+
         
         // encoding: PI parts
         //degree = piDegree;
@@ -297,6 +306,13 @@ public:
                 }
             }
         }
+    }
+
+    void printCountNumber() {
+        for (int number : numberCount) {
+            std::cout << number << " ";
+        }
+        std::cout << std::endl;
     }
 private:
                   

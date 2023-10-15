@@ -14,3 +14,5 @@ add_executable(simbats_master
 add_executable(generate generateDistributionWithWassersteinDistance.cpp fileinout.h BatchDegree.h)
 
 add_executable(nextdegree Thenextdegree.cpp fileinout.h)
+
+add_executable(packetsSlection fileinout.h packets_selection.cpp)

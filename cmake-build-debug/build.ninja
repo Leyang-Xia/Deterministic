@@ -157,6 +157,38 @@ build nextdegree: CXX_EXECUTABLE_LINKER__nextdegree_Debug CMakeFiles/nextdegree.
   TARGET_FILE = nextdegree
   TARGET_PDB = nextdegree.dbg
 
+# =============================================================================
+# Object build statements for EXECUTABLE target packetsSlection
+
+
+#############################################
+# Order-only phony target for packetsSlection
+
+build cmake_object_order_depends_target_packetsSlection: phony || CMakeFiles/packetsSlection.dir
+
+build CMakeFiles/packetsSlection.dir/packets_selection.cpp.o: CXX_COMPILER__packetsSlection_Debug /Users/leyang/Desktop/simbats-master/packets_selection.cpp || cmake_object_order_depends_target_packetsSlection
+  DEP_FILE = CMakeFiles/packetsSlection.dir/packets_selection.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++14
+  INCLUDES = -I/Users/leyang/Desktop/simbats-master/.
+  OBJECT_DIR = CMakeFiles/packetsSlection.dir
+  OBJECT_FILE_DIR = CMakeFiles/packetsSlection.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target packetsSlection
+
+
+#############################################
+# Link the executable packetsSlection
+
+build packetsSlection: CXX_EXECUTABLE_LINKER__packetsSlection_Debug CMakeFiles/packetsSlection.dir/packets_selection.cpp.o
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+  OBJECT_DIR = CMakeFiles/packetsSlection.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = packetsSlection
+  TARGET_PDB = packetsSlection.dbg
+
 
 #############################################
 # Utility command for edit_cache
@@ -191,7 +223,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /Users/leyang/Desktop/simbats-master/cmake-build-debug
 
-build all: phony simbats_master generate nextdegree
+build all: phony simbats_master generate nextdegree packetsSlection
 
 # =============================================================================
 # Built-in targets

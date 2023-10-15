@@ -389,7 +389,7 @@ int main(int argc, char* argv[]) {
     switch(argc) {
         case 1:
             batchSize = 32; // 16, 32, 64
-            packetNum = 800;
+            packetNum = 160;
             iterationNum = 1000;
             break;
         case 4:
@@ -524,6 +524,8 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < nErrIdx; i++) {
         cout << errIdx[i] << " ";
     }
+
+    cout << "packets selection count: ";
 
 }
 

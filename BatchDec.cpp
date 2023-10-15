@@ -103,7 +103,7 @@ CheckNode* BatsDecoder::initNewBatch(KeyType batchID, int random) {
     
     nRecBatch = (batchID > nRecBatch)? batchID : nRecBatch;
 
-    psrand->seed(batchID);
+    psrand->seed(batchID ^ random);
     // generate the degree
     int degree = (int) getBatchDegree(batchID, random);
 
